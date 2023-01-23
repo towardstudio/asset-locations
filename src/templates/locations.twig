@@ -1,0 +1,63 @@
+{% set items = [
+	{
+		heading: 'Entries',
+		elements: locations.entries,
+	},
+	{
+		heading: 'Categories',
+		elements: locations.categories,
+	},
+	{
+		heading: 'Globals',
+		elements: locations.globals,
+	}
+] %}
+
+{% set countElements = 0 %}
+{% for item in items %}
+	{% set countElements = countElements + item.elements | length %}
+{% endfor %}
+
+{% if countElements > 0 %}
+	<hr>
+	{% for item in items %}
+		<table class="data fullwidth" style="margin-bottom:1rem;">
+			{% if item.elements %}
+				<thead>
+					<tr>
+						<th>{{ item.heading }}</th>
+						<th style="width:10%">
+							<span data-icon="world" aria-hidden="true"></span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for key, items in item.elements %}
+						<tr>
+							<td><strong>{{ key }}</strong></td>
+							<td></td>
+						</tr>
+						{% for location in items %}
+							<tr>
+								<td class="element">
+									<span class="status {{ location.status | default('live') }}" role="img" aria-label="Status: Live"></span>
+									<a class="label" href="{{ location.cpUrl }}" target="_blank">
+										{{ location.title }}
+									</a>
+								</td>
+								<td style="width:10%">
+									{% if location.url %}
+										<a href="{{ location.url }}" title="Visit webpage" rel="noopener" target="_blank" data-icon="world" aria-label="View"></a>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					{% endfor %}
+				</tbody>
+			{% endif %}
+		</table>
+	{% endfor %}
+{% else %}
+	<p>This asset cannot be found within <strong>entries</strong>, <strong>categories</strong> or <strong>globals</strong>.</p>
+	<p>However it may be used by a plugin, so caution is advised.</p>
+{% endif %}

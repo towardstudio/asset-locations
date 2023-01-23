@@ -1,0 +1,28 @@
+{
+	"name": "bluegg/asset-locations",
+	"description": "New native field to display an assets location",
+	"type": "craft-plugin",
+	"version": "1.0.0",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Bluegg",
+			"homepage": "https://bluegg.co.uk"
+		}
+	],
+	"require": {
+		"craftcms/cms": "^4.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"bluegg\\assetlocations\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Asset Locations",
+		"handle": "assetlocations",
+		"developer": "Bluegg",
+		"developerUrl": "https://bluegg.co.uk",
+		"class": "bluegg\\assetlocations\\AssetLocations"
+	}
+}
