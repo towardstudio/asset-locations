@@ -2,7 +2,7 @@
 	"name": "bluegg/asset-locations",
 	"description": "New native field to display an assets location",
 	"type": "craft-plugin",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"authors": [
 		{
