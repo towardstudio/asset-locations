@@ -41,15 +41,15 @@ class FindAssetService extends Component
 			->all();
 
 		foreach ($relatedEntries as $entry) {
-			$entries = (object) [
-				$entry->slug => (object) [
-					"title" =>
-						$entry->title ?? AssetLocations::$plugin->section->getSetName($entry),
-					"cpUrl" => $entry->cpEditUrl,
-					"url" => $entry->url,
-					"status" => $entry->status,
-					"section" => AssetLocations::$plugin->section->getSectionName($entry),
-				],
+			$slug = $entry->slug;
+
+			$entries->$slug = (object) [
+				"title" =>
+					$entry->title ?? AssetLocations::$plugin->section->getSetName($entry),
+				"cpUrl" => $entry->cpEditUrl,
+				"url" => $entry->url,
+				"status" => $entry->status,
+				"section" => AssetLocations::$plugin->section->getSectionName($entry),
 			];
 		}
 

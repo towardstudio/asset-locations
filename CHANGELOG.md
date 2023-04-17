@@ -17,3 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 2.0.0 - 2022-03-20
 
 -   Change Bluegg to Toward
+
+## 2.1.0 - 2023-04-17
+
+-   Fix Multiple Images within a structure
