@@ -1,13 +1,13 @@
 {
-	"name": "bluegg/asset-locations",
+	"name": "towardstudio/asset-locations",
 	"description": "New native field to display an assets location",
 	"type": "craft-plugin",
-	"version": "1.0.1",
+	"version": "2.0.0",
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "Bluegg",
-			"homepage": "https://bluegg.co.uk"
+			"name": "Toward Studio",
+			"homepage": "https://toward.studio"
 		}
 	],
 	"require": {
@@ -15,14 +15,16 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"bluegg\\assetlocations\\": "src/"
+			"towardstudio\\assetlocations\\": "src/"
 		}
 	},
 	"extra": {
 		"name": "Asset Locations",
 		"handle": "assetlocations",
-		"developer": "Bluegg",
-		"developerUrl": "https://bluegg.co.uk",
-		"class": "bluegg\\assetlocations\\AssetLocations"
+		"developer": "Toward Studio",
+		"developerUrl": "https://toward.studio",
+		"documentationUrl": "https://github.com/towardstudio/asset-locations/blob/main/README.md",
+		"changelogUrl": "https://raw.githubusercontent.com/towardstudio/asset-locations/main/CHANGELOG.md",
+		"class": "towardstudio\\assetlocations\\AssetLocations"
 	}
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace bluegg\assetlocations\fieldlayoutelements;
+namespace towardstudio\assetlocations\fieldlayoutelements;
 
-use bluegg\assetlocations\AssetLocations;
+use towardstudio\assetlocations\AssetLocations;
 
 use Craft;
 use craft\base\ElementInterface;
@@ -107,6 +107,32 @@ class Locations extends BaseNativeField
 	}
 
 	/**
+	 * Check if there are any global sets
+	 *
+	 * @return int
+	 */
+	public function globalsCheck(): int
+	{
+		$globalSets = \craft\elements\GlobalSet::find()
+    		->all();
+
+		return count($globalSets);
+	}
+
+	/**
+	 * Check if there are any categories
+	 *
+	 * @return int
+	 */
+	public function categoryCheck(): int
+	{
+		$categories = \craft\elements\Category::find()
+    		->all();
+
+		return count($categories);
+	}
+
+	/**
 	 * Format the array so we can use the sections as headings
 	 *
 	 * @param array $array
@@ -141,6 +167,8 @@ class Locations extends BaseNativeField
 	{
 		return Craft::$app->getView()->renderTemplate("assetlocations/locations", [
 			"locations" => $this->getValue($element),
+			"categoriesCount" => $this->categoryCheck(),
+			"globalsCount" => $this->globalsCheck(),
 		]);
 	}
 }

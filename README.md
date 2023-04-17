@@ -21,13 +21,13 @@ cd /path/to/project/craft
 2. Then tell Composer to load the plugin:
 
 ```
-composer require bluegg/asset-locations
+composer require towardstudio/asset-locations
 ```
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Asset Locations.
 
 4. Go to a Volume and add the _Asset Locations_ field.
 
-[Bluegg Disclaimer](https://github.com/Bluegg/bluegg-open-source-disclaimer)
+[Toward Disclaimer](https://github.com/towardstudio/toward-open-source-disclaimer)
 
-Brought to you by [Bluegg](https://bluegg.co.uk)
+Brought to you by [Toward](https://toward.studio)

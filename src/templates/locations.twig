@@ -58,6 +58,29 @@
 		</table>
 	{% endfor %}
 {% else %}
-	<p>This asset cannot be found within <strong>entries</strong>, <strong>categories</strong> or <strong>globals</strong>.</p>
+	{% set types = [
+		'entries'
+	] %}
+
+	{% if categoriesCount > 0 %}
+		{% set types = types | merge([
+			'categories'
+		]) %}
+	{% endif %}
+
+	{% if globalsCount > 0 %}
+		{% set types = types | merge([
+			'globals'
+		]) %}
+	{% endif %}
+
+	<p>This asset cannot be found within
+		{% for type in types %}
+			{% set secondLast = loop.index == (types | length - 1) %}
+			<strong>{{ type }}</strong>{% if not secondLast and not loop.last %}, {% elseif not loop.last %} or {% endif %}{% endfor %}.</p>
 	<p>However it may be used by a plugin, so caution is advised.</p>
 {% endif %}
+
+
+
+

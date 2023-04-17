@@ -1,5 +1,5 @@
 <?php
-namespace bluegg\assetlocations\services;
+namespace towardstudio\assetlocations\services;
 
 use Craft;
 use craft\base\Component;

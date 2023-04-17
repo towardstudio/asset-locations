@@ -1,5 +1,5 @@
 <?php
-namespace bluegg\assetlocations;
+namespace towardstudio\assetlocations;
 
 /** Craft **/
 use Craft;
@@ -11,16 +11,16 @@ use craft\events\SetElementTableAttributeHtmlEvent;
 use craft\models\FieldLayout;
 
 /** Custom **/
-use bluegg\assetlocations\fieldlayoutelements\Locations;
-use bluegg\assetlocations\services\FindAssetService;
-use bluegg\assetlocations\services\GetSectionService;
-use bluegg\assetlocations\services\FindElementService;
-use bluegg\assetlocations\services\GetUsageService;
+use towardstudio\assetlocations\fieldlayoutelements\Locations;
+use towardstudio\assetlocations\services\FindAssetService;
+use towardstudio\assetlocations\services\GetSectionService;
+use towardstudio\assetlocations\services\FindElementService;
+use towardstudio\assetlocations\services\GetUsageService;
 
 use yii\base\Event;
 
 /**
- * @author    Bluegg
+ * @author    Toward Studio
  * @package   AssetLocations
  * @since     1.0.0
  *

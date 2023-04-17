@@ -1,7 +1,7 @@
 <?php
-namespace bluegg\assetlocations\services;
+namespace towardstudio\assetlocations\services;
 
-use bluegg\assetlocations\AssetLocations;
+use towardstudio\assetlocations\AssetLocations;
 
 use Craft;
 use craft\base\Component;
