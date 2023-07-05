@@ -13,7 +13,6 @@ use craft\elements\Entry;
 use craft\elements\Category;
 use craft\elements\GlobalSet;
 
-
 class GetUsageService extends Component
 {
 
@@ -27,17 +26,25 @@ class GetUsageService extends Component
 	public function getUsage(AssetElement $asset): bool {
 
 		// Check Entries
-		$entries = AssetLocations::$plugin->elementService->getElements(Entry::class, $asset, 0);
+		$entries = AssetLocations::$plugin->elementService->getElements(Entry::class, $asset, $asset->siteId);
 
 		// If Entries isn't empty, return true
 		if (!empty($entries)) {
 			return true;
 		}
 
+        // Check Links
+		$links = AssetLocations::$plugin->elementService->getLinks($asset, $asset->siteId);
+
+		// If Links isn't empty, return true
+		if (!empty($links)) {
+			return true;
+		}
+
 		// Check Categories
 		$categories = AssetLocations::$plugin->elementService->getElements(
 			Category::class,
-			$asset, 0
+			$asset, $asset->siteId
 		);
 
 		// If Categories isn't empty, return true
@@ -46,7 +53,7 @@ class GetUsageService extends Component
 		}
 
 		// Check Globals
-		$globals = AssetLocations::$plugin->elementService->getElements(GlobalSet::class, $asset, 0);
+		$globals = AssetLocations::$plugin->elementService->getElements(GlobalSet::class, $asset, $asset->siteId);
 
 		// If Globals isn't empty, return true
 		if (!empty($globals)) {

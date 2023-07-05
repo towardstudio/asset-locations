@@ -92,6 +92,7 @@ class Locations extends BaseNativeField
 	public function getValue(AssetElement $asset): array
 	{
 		$entries = AssetLocations::$plugin->elementService->getElements(Entry::class, $asset, $asset->siteId);
+        $links = AssetLocations::$plugin->elementService->getLinks($asset, $asset->siteId);
 		$categories = AssetLocations::$plugin->elementService->getElements(
 			Category::class,
 			$asset,
@@ -101,6 +102,7 @@ class Locations extends BaseNativeField
 
 		return [
 			"entries" => $this->formatResults($entries),
+            "links" => $this->formatResults($links),
 			"categories" => $this->formatResults($categories),
 			"globals" => $this->formatResults($globals),
 		];

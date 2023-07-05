@@ -12,6 +12,7 @@ use craft\models\FieldLayout;
 
 /** Custom **/
 use towardstudio\assetlocations\fieldlayoutelements\Locations;
+
 use towardstudio\assetlocations\services\FindAssetService;
 use towardstudio\assetlocations\services\GetSectionService;
 use towardstudio\assetlocations\services\FindElementService;
@@ -48,10 +49,9 @@ class AssetLocations extends Plugin
 
 		// Add Native Fields to be added to the Entries
 		Event::on(
-		FieldLayout::class,
+			FieldLayout::class,
 			FieldLayout::EVENT_DEFINE_NATIVE_FIELDS,
-			function (DefineFieldLayoutFieldsEvent $event)
-			{
+			function (DefineFieldLayoutFieldsEvent $event) {
 				/** @var FieldLayout $fieldLayout */
 				$fieldLayout = $event->sender;
 				if ($fieldLayout->type === Asset::class) {
@@ -62,48 +62,58 @@ class AssetLocations extends Plugin
 		);
 
 		/**
-         * Add Usage Column to Assets which have the native field
-         * NOTE: You still need to select them with the 'gear'
-         *
-         * @return array
-         */
-        Event::on(
+		 * Add Usage Column to Assets which have the native field
+		 * NOTE: You still need to select them with the 'gear'
+		 *
+		 * @return array
+		 */
+		Event::on(
 			Asset::class,
 			Asset::EVENT_REGISTER_TABLE_ATTRIBUTES,
-			function (RegisterElementTableAttributesEvent $event)
-			{
-            	$event->tableAttributes['used'] = [
-                	'label' => 'In Use',
-            	];
-        	}
+			function (RegisterElementTableAttributesEvent $event) {
+				$event->tableAttributes["used"] = [
+					"label" => "In Use",
+				];
+			}
 		);
 
 		/**
-         * Set HTML for Usage Column
-         *
-         * @return string
-         */
+		 * Set HTML for Usage Column
+		 *
+		 * @return string
+		 */
 		Event::on(
 			Asset::class,
 			Asset::EVENT_SET_TABLE_ATTRIBUTE_HTML,
 			function (SetElementTableAttributeHtmlEvent $event) {
-				if ($event->attribute === 'used') {
+				if ($event->attribute === "used") {
 					// Get Asset
-                	$asset = $event->sender;
+					$asset = $event->sender;
 
-					$tickIcon = file_get_contents($this->getBasePath() . DIRECTORY_SEPARATOR . 'resources/images/tick.svg');
-					$questionIcon = file_get_contents($this->getBasePath() . DIRECTORY_SEPARATOR . 'resources/images/question.svg');
+					$tickIcon = file_get_contents(
+						$this->getBasePath() .
+							DIRECTORY_SEPARATOR .
+							"resources/images/tick.svg"
+					);
+					$questionIcon = file_get_contents(
+						$this->getBasePath() .
+							DIRECTORY_SEPARATOR .
+							"resources/images/question.svg"
+					);
 
 					// Set HTML
-                	$event->html = $this->usage->getUsage($asset) ?
-						'<span title="This asset is used">' . $tickIcon . '</span><span class="visually-hidden">This asset is used</span>' :
-						'<span title="This asset may be used">' . $questionIcon . '</span><span class="visually-hidden">This asset may be used</span>';
+					$event->html = $this->usage->getUsage($asset)
+						? '<span title="This asset is used">' .
+							$tickIcon .
+							'</span><span class="visually-hidden">This asset is used</span>'
+						: '<span title="This asset may be used">' .
+							$questionIcon .
+							'</span><span class="visually-hidden">This asset may be used</span>';
 
-                	// Prevent other event listeners from getting invoked
-                	$event->handled = true;
+					// Prevent other event listeners from getting invoked
+					$event->handled = true;
 				}
 			}
 		);
-
 	}
 }

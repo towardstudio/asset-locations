@@ -21,3 +21,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 2.1.0 - 2023-04-17
 
 -   Fix Multiple Images within a structure
+
+## 2.2.0 - 2023-07-05
+
+-   Added Link Fields as a searchable option

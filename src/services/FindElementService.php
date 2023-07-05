@@ -5,7 +5,7 @@ use towardstudio\assetlocations\AssetLocations;
 
 use Craft;
 use craft\base\Component;
-
+use craft\db\Query;
 use craft\elements\Asset as AssetElement;
 
 class FindElementService extends Component
@@ -39,4 +39,61 @@ class FindElementService extends Component
 
 		return $assetEntries;
 	}
+
+    /**
+	 * Get Links
+	 * @description Check to see if the asset is used within any links
+	 *
+	 * @param String $type
+	 * @param AssetElement $asset
+	 * @return ?array
+	 */
+	public function getLinks(AssetElement $asset, int $siteId): ?array
+	{
+        // Check the plugin is installed
+		$links = Craft::$app->plugins->getPlugin("typedlinkfield", false);
+
+        if ($links) {
+
+            $entries = [];
+
+            $linkQuery = new Query();
+            $linkQuery = $linkQuery
+			    ->select('elementId')
+			    ->from('lenz_linkfield')
+			    ->where([
+				    'linkedId' => $asset->id,
+                    'siteId' => $siteId,
+                ])
+                ->all();
+
+            foreach ($linkQuery as $link) {
+
+                // Check Entries
+                $linkEntry = AssetLocations::$plugin->findAsset->checkEntriesElement($link['elementId'], $siteId);
+
+                if ((array) $linkEntry) {
+                    $entries = array_merge((array) $entries, (array) $linkEntry);
+                }
+
+                // Check Matrix
+                $matrixElement = AssetLocations::$plugin->findAsset->checkMatrixElement($link['elementId'], $siteId);
+
+                if ((array) $matrixElement) {
+                  $entries = array_merge((array) $entries, (array) $matrixElement);
+                }
+
+                // Check Super Tables
+                $superTableElement = AssetLocations::$plugin->findAsset->checkSuperTableElements($link['elementId'], $siteId);
+
+                if ((array) $superTableElement) {
+                   $entries = array_merge((array) $entries, (array) $superTableElement);
+                }
+            }
+
+            return $entries;
+        }
+
+	}
+
 }
