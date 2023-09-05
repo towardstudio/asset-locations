@@ -21,26 +21,50 @@ class FindElementService extends Component
 	 * @param AssetElement $asset
 	 * @return ?array
 	 */
-	public function getElements(string $type, AssetElement $asset, int $siteId): ?array
-	{
+	public function getElements(
+		string $type,
+		AssetElement $asset,
+		int $siteId
+	): ?array {
 		$assetEntries = [];
 
 		// Find all Asset Fields within Entries where this asset is used
-		$relatedEntries = AssetLocations::$plugin->findAsset->checkAssetFields($type, $asset, $siteId);
-		$assetEntries = array_merge((array) $assetEntries, (array) $relatedEntries);
+		$relatedEntries = AssetLocations::$plugin->findAsset->checkAssetFields(
+			$type,
+			$asset,
+			$siteId
+		);
+		$assetEntries = array_merge(
+			(array) $assetEntries,
+			(array) $relatedEntries
+		);
 
 		// Get all Matrix Blocks where this asset is used within Entries
-		$relatedMatrix = AssetLocations::$plugin->findAsset->checkMatrixFields($type, $asset, $siteId);
-		$assetEntries = array_merge((array) $assetEntries, (array) $relatedMatrix);
+		$relatedMatrix = AssetLocations::$plugin->findAsset->checkMatrixFields(
+			$type,
+			$asset,
+			$siteId
+		);
+		$assetEntries = array_merge(
+			(array) $assetEntries,
+			(array) $relatedMatrix
+		);
 
 		// Get all Super Tables where this asset is used within Entries
-		$tableEntries = AssetLocations::$plugin->findAsset->checkSuperTableFields($type, $asset, $siteId);
-		$assetEntries = array_merge((array) $assetEntries, (array) $tableEntries);
+		$tableEntries = AssetLocations::$plugin->findAsset->checkSuperTableFields(
+			$type,
+			$asset,
+			$siteId
+		);
+		$assetEntries = array_merge(
+			(array) $assetEntries,
+			(array) $tableEntries
+		);
 
 		return $assetEntries;
 	}
 
-    /**
+	/**
 	 * Get Links
 	 * @description Check to see if the asset is used within any links
 	 *
@@ -50,50 +74,66 @@ class FindElementService extends Component
 	 */
 	public function getLinks(AssetElement $asset, int $siteId): ?array
 	{
-        // Check the plugin is installed
+		// Check the plugin is installed
 		$links = Craft::$app->plugins->getPlugin("typedlinkfield", false);
 
-        if ($links) {
+		if ($links) {
+			$entries = [];
 
-            $entries = [];
+			$linkQuery = new Query();
+			$linkQuery = $linkQuery
+				->select("elementId")
+				->from("lenz_linkfield")
+				->where([
+					"linkedId" => $asset->id,
+					"siteId" => $siteId,
+				])
+				->all();
 
-            $linkQuery = new Query();
-            $linkQuery = $linkQuery
-			    ->select('elementId')
-			    ->from('lenz_linkfield')
-			    ->where([
-				    'linkedId' => $asset->id,
-                    'siteId' => $siteId,
-                ])
-                ->all();
+			foreach ($linkQuery as $link) {
+				// Check Entries
+				$linkEntry = AssetLocations::$plugin->findAsset->checkEntriesElement(
+					$link["elementId"],
+					$siteId
+				);
 
-            foreach ($linkQuery as $link) {
+				if ((array) $linkEntry) {
+					$entries = array_merge(
+						(array) $entries,
+						(array) $linkEntry
+					);
+				}
 
-                // Check Entries
-                $linkEntry = AssetLocations::$plugin->findAsset->checkEntriesElement($link['elementId'], $siteId);
+				// Check Matrix
+				$matrixElement = AssetLocations::$plugin->findAsset->checkMatrixElement(
+					$link["elementId"],
+					$siteId
+				);
 
-                if ((array) $linkEntry) {
-                    $entries = array_merge((array) $entries, (array) $linkEntry);
-                }
+				if ((array) $matrixElement) {
+					$entries = array_merge(
+						(array) $entries,
+						(array) $matrixElement
+					);
+				}
 
-                // Check Matrix
-                $matrixElement = AssetLocations::$plugin->findAsset->checkMatrixElement($link['elementId'], $siteId);
+				// Check Super Tables
+				$superTableElement = AssetLocations::$plugin->findAsset->checkSuperTableElements(
+					$link["elementId"],
+					$siteId
+				);
 
-                if ((array) $matrixElement) {
-                  $entries = array_merge((array) $entries, (array) $matrixElement);
-                }
+				if ((array) $superTableElement) {
+					$entries = array_merge(
+						(array) $entries,
+						(array) $superTableElement
+					);
+				}
+			}
 
-                // Check Super Tables
-                $superTableElement = AssetLocations::$plugin->findAsset->checkSuperTableElements($link['elementId'], $siteId);
-
-                if ((array) $superTableElement) {
-                   $entries = array_merge((array) $entries, (array) $superTableElement);
-                }
-            }
-
-            return $entries;
-        }
-
+			return $entries;
+		} else {
+			return [];
+		}
 	}
-
 }
