@@ -83,7 +83,7 @@ class FindElementService extends Component
 			$linkQuery = new Query();
 			$linkQuery = $linkQuery
 				->select("elementId")
-				->from("lenz_linkfield")
+				->from("{{%lenz_linkfield}}")
 				->where([
 					"linkedId" => $asset->id,
 					"siteId" => $siteId,
