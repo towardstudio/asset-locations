@@ -18,7 +18,7 @@ class Locations extends BaseNativeField
 	/**
 	 * @inheritdoc
 	 */
-	public string $attribute = "locations";
+	public string $attribute = 'locations';
 
 	/**
 	 * @inheritdoc
@@ -26,10 +26,10 @@ class Locations extends BaseNativeField
 	public function __construct($config = [])
 	{
 		unset(
-			$config["attribute"],
-			$config["mandatory"],
-			$config["requirable"],
-			$config["translatable"]
+			$config['attribute'],
+			$config['mandatory'],
+			$config['requirable'],
+			$config['translatable']
 		);
 
 		parent::__construct($config);
@@ -40,13 +40,13 @@ class Locations extends BaseNativeField
 	 */
 	public function defaultLabel(?ElementInterface $element = null, bool $static = false): ?string
 	{
-		return Craft::t("app", "Asset Locations");
+		return Craft::t('app', 'Asset Locations');
 	}
 
 	/**
 	 * @var string The input type
 	 */
-	public string $type = "text";
+	public string $type = 'text';
 
 	/**
 	 * @var string|null The input’s `name` attribute value.
@@ -68,7 +68,7 @@ class Locations extends BaseNativeField
 	/**
 	 * @var string|null The input’s `placeholder` attribute value.
 	 */
-	public ?string $placeholder = "0";
+	public ?string $placeholder = '0';
 
 	/**
 	 * @inheritdoc
@@ -78,7 +78,7 @@ class Locations extends BaseNativeField
 		$fields = parent::fields();
 
 		// Don't include the value
-		unset($fields["value"]);
+		unset($fields['value']);
 
 		return $fields;
 	}
@@ -91,20 +91,28 @@ class Locations extends BaseNativeField
 	 */
 	public function getValue(AssetElement $asset): array
 	{
-		$entries = AssetLocations::$plugin->elementService->getElements(Entry::class, $asset, $asset->siteId);
-        $links = AssetLocations::$plugin->elementService->getLinks($asset, $asset->siteId);
+		$entries = AssetLocations::$plugin->elementService->getElements(
+			Entry::class,
+			$asset,
+			$asset->siteId
+		);
+		$links = AssetLocations::$plugin->elementService->getLinks($asset, $asset->siteId);
 		$categories = AssetLocations::$plugin->elementService->getElements(
 			Category::class,
 			$asset,
 			$asset->siteId
 		);
-		$globals = AssetLocations::$plugin->elementService->getElements(GlobalSet::class, $asset, $asset->siteId);
+		$globals = AssetLocations::$plugin->elementService->getElements(
+			GlobalSet::class,
+			$asset,
+			$asset->siteId
+		);
 
 		return [
-			"entries" => $this->formatResults($entries),
-            "links" => $this->formatResults($links),
-			"categories" => $this->formatResults($categories),
-			"globals" => $this->formatResults($globals),
+			'entries' => $this->formatResults($entries),
+			'links' => $this->formatResults($links),
+			'categories' => $this->formatResults($categories),
+			'globals' => $this->formatResults($globals),
 		];
 	}
 
@@ -115,8 +123,7 @@ class Locations extends BaseNativeField
 	 */
 	public function globalsCheck(): int
 	{
-		$globalSets = \craft\elements\GlobalSet::find()
-    		->all();
+		$globalSets = \craft\elements\GlobalSet::find()->all();
 
 		return count($globalSets);
 	}
@@ -128,8 +135,7 @@ class Locations extends BaseNativeField
 	 */
 	public function categoryCheck(): int
 	{
-		$categories = \craft\elements\Category::find()
-    		->all();
+		$categories = \craft\elements\Category::find()->all();
 
 		return count($categories);
 	}
@@ -153,10 +159,10 @@ class Locations extends BaseNativeField
 		}
 
 		// Move Singles to the top of the Array
-		if (isset($newArray["Singles"])) {
-			$item = $newArray["Singles"];
-			unset($newArray["Singles"]);
-			$newArray = ["Singles" => $item] + $newArray;
+		if (isset($newArray['Singles'])) {
+			$item = $newArray['Singles'];
+			unset($newArray['Singles']);
+			$newArray = ['Singles' => $item] + $newArray;
 		}
 
 		return $newArray;
@@ -167,10 +173,10 @@ class Locations extends BaseNativeField
 	 */
 	protected function inputHtml(?ElementInterface $element = null, bool $static = false): ?string
 	{
-		return Craft::$app->getView()->renderTemplate("assetlocations/locations", [
-			"locations" => $this->getValue($element),
-			"categoriesCount" => $this->categoryCheck(),
-			"globalsCount" => $this->globalsCheck(),
+		return Craft::$app->getView()->renderTemplate('assetlocations/locations', [
+			'locations' => $this->getValue($element),
+			'categoriesCount' => $this->categoryCheck(),
+			'globalsCount' => $this->globalsCheck(),
 		]);
 	}
 }
