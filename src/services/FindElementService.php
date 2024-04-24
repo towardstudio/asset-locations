@@ -31,15 +31,9 @@ class FindElementService extends Component
 			$asset,
 			$siteId
 		);
+
 		$assetEntries = array_merge((array) $assetEntries, (array) $relatedEntries);
 
-		// Get all Matrix Blocks where this asset is used within Entries
-		$relatedMatrix = AssetLocations::$plugin->findAsset->checkMatrixFields(
-			$type,
-			$asset,
-			$siteId
-		);
-		$assetEntries = array_merge((array) $assetEntries, (array) $relatedMatrix);
 
 		// Get all Super Tables where this asset is used within Entries
 		$tableEntries = AssetLocations::$plugin->findAsset->checkSuperTableFields(
@@ -100,16 +94,6 @@ class FindElementService extends Component
 
 						$entries = array_merge((array) $entries, (array) $entryObject);
 					}
-				}
-
-				// Check Matrix
-				$matrixElement = AssetLocations::$plugin->findAsset->checkMatrixElement(
-					$link['elementId'],
-					$siteId
-				);
-
-				if ((array) $matrixElement) {
-					$entries = array_merge((array) $entries, (array) $matrixElement);
 				}
 
 				// Check Super Tables

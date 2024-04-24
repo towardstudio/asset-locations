@@ -24,19 +24,40 @@ class GetSectionService extends Component
 		}
 
 		if ($element instanceof Entry) {
-			$section = Craft::$app->sections->getSectionById($element->sectionId);
+            $sectionID = $element->sectionId;
+            if ($sectionID) {
+			    $section = Craft::$app->entries->getSectionById($sectionID);
 
-			if ($section) {
-				$sectionName = $section->name;
+			    if ($section) {
+				    $sectionName = $section->name;
 
-				if ($section->type === "single") {
-					$sectionName = "Singles";
-				}
+				    if ($section->type === "single") {
+					    $sectionName = "Singles";
+				    }
 
-				return $sectionName;
-			} else {
-				return null;
-			}
+				    return $sectionName;
+			    } else {
+				    return null;
+			    }
+            } else {
+                $ownerID = $element->primaryOwnerId;
+                if ($ownerID) {
+
+                    $elementRow = Craft::$app->elements->getElementById($ownerID);
+                    $section = Craft::$app->entries->getSectionById($elementRow->sectionId);
+                    if ($section) {
+				        $sectionName = $section->name;
+
+				        if ($section->type === "single") {
+					        $sectionName = "Singles";
+				        }
+
+				        return $sectionName;
+			        } else {
+				        return null;
+			        }
+                };
+            }
 		} elseif ($element instanceof Category) {
 			$group = Craft::$app->categories->getGroupById($element->groupId);
 
@@ -57,8 +78,8 @@ class GetSectionService extends Component
 	 * @param object $element
 	 * @return ?string
 	 */
-	public function getSetName($element): string
+	public function getSetName($element): ?string
 	{
-		return $element->name;
+		return $element->title;
 	}
 }

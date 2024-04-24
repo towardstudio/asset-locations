@@ -96,12 +96,15 @@ class Locations extends BaseNativeField
 			$asset,
 			$asset->siteId
 		);
+
 		$links = AssetLocations::$plugin->elementService->getLinks($asset, $asset->siteId);
+
 		$categories = AssetLocations::$plugin->elementService->getElements(
 			Category::class,
 			$asset,
 			$asset->siteId
 		);
+
 		$globals = AssetLocations::$plugin->elementService->getElements(
 			GlobalSet::class,
 			$asset,

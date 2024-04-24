@@ -1,4 +1,4 @@
-# Assets Locations plugin for Craft CMS 4.x
+# Assets Locations plugin for Craft CMS 5.x
 
 Creates a new native field which will display which entries/categories/globals your asset is used within.
 
@@ -6,7 +6,7 @@ This plugin supports the use of Matrix Field, Asset Fields & Super Tables.
 
 ## Requirements
 
-This plugin requires Craft CMS 4 or later.
+This plugin requires Craft CMS 5 or later.
 
 ## Installation
 

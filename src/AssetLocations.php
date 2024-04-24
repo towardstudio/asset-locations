@@ -7,7 +7,7 @@ use craft\base\Plugin;
 use craft\elements\Asset;
 use craft\events\DefineFieldLayoutFieldsEvent;
 use craft\events\RegisterElementTableAttributesEvent;
-use craft\events\SetElementTableAttributeHtmlEvent;
+use craft\events\DefineAttributeHtmlEvent;
 use craft\models\FieldLayout;
 
 /** Custom **/
@@ -84,8 +84,8 @@ class AssetLocations extends Plugin
 		 */
 		Event::on(
 			Asset::class,
-			Asset::EVENT_SET_TABLE_ATTRIBUTE_HTML,
-			function (SetElementTableAttributeHtmlEvent $event) {
+			Asset::EVENT_DEFINE_ATTRIBUTE_HTML,
+			function (DefineAttributeHtmlEvent $event) {
 				if ($event->attribute === "used") {
 					// Get Asset
 					$asset = $event->sender;

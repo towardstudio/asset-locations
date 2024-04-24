@@ -13,7 +13,6 @@ use craft\helpers\Db;
 
 use craft\elements\Asset as AssetElement;
 use craft\elements\Entry as EntryElement;
-use craft\elements\MatrixBlock;
 
 use verbb\supertable\elements\SuperTableBlockElement;
 
@@ -44,14 +43,47 @@ class FindAssetService extends Component
 		foreach ($relatedEntries as $entry) {
 			$slug = $entry->slug;
 
-			$entries->$slug = (object) [
-				"title" =>
-					$entry->title ?? AssetLocations::$plugin->section->getSetName($entry),
-				"cpUrl" => $entry->cpEditUrl,
-				"url" => $entry->url,
-				"status" => $entry->status,
-				"section" => AssetLocations::$plugin->section->getSectionName($entry),
-			];
+            if ($slug) {
+			    $entries->$slug = (object) [
+				    "title" =>
+					    $entry->title ?? AssetLocations::$plugin->section->getSetName($entry),
+				    "cpUrl" => $entry->cpEditUrl,
+				    "url" => $entry->url,
+				    "status" => $entry->status,
+				    "section" => AssetLocations::$plugin->section->getSectionName($entry),
+			    ];
+            } else {
+                $id = $entry->id;
+
+                $elementObject = EntryElement::find()
+                    ->id($id)
+                    ->siteId($siteId)
+                    ->status(null)
+                    ->one();
+
+                if ($elementObject)
+                {
+                    $entryObject = EntryElement::find()
+                        ->id($elementObject->primaryOwnerId)
+                        ->status(null)
+                        ->drafts(true)
+                        ->one();
+
+                    if ($entryObject)
+                    {
+                        $slug = $entryObject->slug;
+
+                        $entries->$slug = (object) [
+				            "title" =>
+					            $entryObject->title ?? AssetLocations::$plugin->section->getSetName($entryObject),
+				            "cpUrl" => $entryObject->cpEditUrl,
+				            "url" => $entryObject->url,
+				            "status" => $entryObject->status,
+				            "section" => AssetLocations::$plugin->section->getSectionName($entryObject),
+			            ];
+                    }
+                }
+            }
 		}
 
 		return $entries;
@@ -73,91 +105,6 @@ class FindAssetService extends Component
             ->all();
 
         return $linkEntry;
-	}
-
-	/**
-	 * Check Matrix Fields
-	 * @description Check to see if the asset is used within any matrix fields
-	 *
-	 * @param String $type
-	 * @param Asset $asset
-     * @param Int $siteId
-	 * @return ?object
-	 */
-	public function checkMatrixFields(string $type, AssetElement $asset, int $siteId): ?object
-	{
-		// Get all Matrix Blocks related to this asset
-		$relatedMatrix = MatrixBlock::find()
-			->siteId($siteId)
-			->relatedTo(["targetElement" => $asset->id])
-			->all();
-
-		// Get the entry/category the matrix block appears on
-		$matrixEntries = (object) [];
-		foreach ($relatedMatrix as $matrix) {
-			$entry = $type
-				::find()
-				->siteId($siteId)
-				->status(null)
-				->id($matrix->primaryOwnerId)
-				->one();
-
-			if ($entry) {
-				$matrixEntries->{$entry->slug} = (object) [
-					"title" =>
-						$entry->title ?? AssetLocations::$plugin->section->getSetName($entry),
-					"cpUrl" => $entry->cpEditUrl,
-					"url" => $entry->url,
-					"status" => $entry->status,
-					"section" => AssetLocations::$plugin->section->getSectionName($entry),
-				];
-			}
-		}
-
-		return $matrixEntries;
-	}
-
-    /**
-	 * Check Matrix Element
-	 * @description Get the Matrix Element Page
-	 *
-	 * @param String $id
-	 * @param Int $siteId
-	 * @return ?object
-	 */
-	public function checkMatrixElement(string $id, int $siteId): ?object
-	{
-		// Get all Matrix Blocks related to this asset
-		$relatedMatrix = MatrixBlock::find()
-            ->id($id)
-			->siteId($siteId)
-			->all();
-
-		// Get the entry/category the matrix block appears on
-		$matrixEntries = (object) [];
-		foreach ($relatedMatrix as $matrix) {
-            $entry = EntryElement
-				::find()
-				->siteId($siteId)
-				->status(null)
-				->id($matrix->primaryOwnerId)
-				->one();
-
-            if ($entry) {
-				$matrixEntries->{$entry->slug} = (object) [
-					"title" =>
-						$entry->title ?? AssetLocations::$plugin->section->getSetName($entry),
-					"cpUrl" => $entry->cpEditUrl,
-					"url" => $entry->url,
-					"status" => $entry->status,
-					"section" => AssetLocations::$plugin->section->getSectionName($entry),
-				];
-			}
-
-
-		}
-
-		return $matrixEntries;
 	}
 
 	/**
