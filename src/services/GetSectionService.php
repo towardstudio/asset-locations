@@ -44,18 +44,22 @@ class GetSectionService extends Component
                 if ($ownerID) {
 
                     $elementRow = Craft::$app->elements->getElementById($ownerID);
-                    $section = Craft::$app->entries->getSectionById($elementRow->sectionId);
-                    if ($section) {
-				        $sectionName = $section->name;
+                    if ($elementRow->sectionId) {
+                        $section = Craft::$app->entries->getSectionById($elementRow->sectionId);
+                        if ($section) {
+				            $sectionName = $section->name;
 
-				        if ($section->type === "single") {
-					        $sectionName = "Singles";
-				        }
+				            if ($section->type === "single") {
+					            $sectionName = "Singles";
+				            }
 
-				        return $sectionName;
-			        } else {
-				        return null;
-			        }
+				            return $sectionName;
+			            } else {
+				            return null;
+			            }
+                    } else {
+                        return null;
+                    }
                 };
             }
 		} elseif ($element instanceof Category) {
