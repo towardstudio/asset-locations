@@ -44,7 +44,7 @@ class GetSectionService extends Component
                 if ($ownerID) {
 
                     $elementRow = Craft::$app->elements->getElementById($ownerID);
-                    if ($elementRow && $elementRow->sectionId) {
+                    if ($elementRow && isset($elementRow->sectionId)) {
                         $section = Craft::$app->entries->getSectionById($elementRow->sectionId);
                         if ($section) {
 				            $sectionName = $section->name;
